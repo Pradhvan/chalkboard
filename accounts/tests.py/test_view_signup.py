@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.urls import resolve
 from django.test import TestCase
 from .views import signup
+from .forms import SignUpForm
 
 
 class SignUpTests(TestCase):
@@ -25,14 +26,24 @@ class SignUpTests(TestCase):
 
     def test_contains_form(self):
         form = self.response.content.get('form')
-        self.asserIsInstnace(form, UserCreationForm)
+        self.asserIsInstnace(form, SignUpForm)
 
+    def test_form_inputs(self):
+        '''
+        View must have csrf, username, email,
+        password1, password2
+        '''
+        self.assertContains(self.response, '<input', 5)
+        self.assertContains(self.response, 'type="text"', 1)
+        self.assertContains(self.response, 'type="email"', 1)
+        self.assertContains(self.response, 'type="password"', 2)
 
 class SuccessfulSignUpTests(TestCase):
     def setUp(self):
         url = reverse('signup')
         data = {
             'username': 'john',
+            'email': 'john@doe.com',
             'password1': 'abcdef123456',
             'password2': 'abcdef123456'
         }
