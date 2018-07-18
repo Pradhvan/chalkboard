@@ -1,7 +1,7 @@
 langugae: python 
 
 python:
-  - 3.6 
+  - "3.6" 
 
-services:
-  -sqlite
+env:
+  - DJANGO=1.11 DB=sqlite
